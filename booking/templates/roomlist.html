@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>รายการห้องเรียน</h3>
+<div class="row">
+    {% for room in rooms %}
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ room.name }}</h5>
+                <p>ความจุ: {{ room.capacity }} คน</p>
+                <p>ชั่วโมงว่าง: {{ room.available_hours }}</p>
+                <p>สถานะ: 
+                    {% if room.status == 'open' %}
+                        <span class="badge bg-success">เปิด</span>
+                    {% else %}
+                        <span class="badge bg-danger">ปิด</span>
+                    {% endif %}
+                </p>
+                {% if room.available_hours > 0 and room.status == 'open' %}
+                    <a href="{% url 'book_room' room.id %}" class="btn btn-primary">จอง</a>
+                {% else %}
+                    <button class="btn btn-secondary" disabled>ไม่ว่าง</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>ไม่มีห้องเรียนให้จอง</p>
+    {% endfor %}
+</div>
+{% endblock %}
