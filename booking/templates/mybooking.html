@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>การจองของฉัน</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ห้อง</th>
+            <th>ชั่วโมงที่จอง</th>
+            <th>การจัดการ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.room.name }}</td>
+            <td>{{ booking.hours }} ชั่วโมง</td>
+            <td>
+                <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-danger btn-sm">ยกเลิก</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">ยังไม่มีการจอง</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
