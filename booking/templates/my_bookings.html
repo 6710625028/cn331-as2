@@ -1,0 +1,10 @@
+<h2>การจองของคุณ</h2>
+<ul>
+  {% for booking in bookings %}
+    <li>{{ booking.room.name }} - {{ booking.date }}</li>
+  {% empty %}
+    <li>ยังไม่มีการจอง</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'room_list' %}">กลับหน้ารายการห้อง</a>
