@@ -1,9 +1,0 @@
-<h1>Rooms</h1>
-<ul>
-  {% for room in rooms %}
-    <li>
-      {{ room.name }} - จุได้ {{ room.capacity }} คน
-      <a href="{% url 'book_room' room.id %}">จองห้องนี้</a>
-    </li>
-  {% endfor %}
-</ul>
