@@ -1,6 +1,12 @@
 from django.shortcuts import render
-from .models import Room
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
-def room_list(request):
-    rooms = Room.objects.all()
-    return render(request, 'booking/room_list.html', {'rooms': rooms})
+def home(request):
+    return render(request, ’home.html‘)
+
+@login_required
+def my_bookings(request):
+    return HttpResponse(”นี่คือหน้าการจองของฉัน (เฉพาะผู้ที่ login แล้ว)“)
+
+
