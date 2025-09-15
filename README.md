@@ -26,3 +26,8 @@ python manage.py runserver
 ## การพัฒนา
 
 คุณสามารถเพิ่มฟีเจอร์หรือแก้ไขโค้ดได้ตามต้องการ
+
+# รหัสแอดมิน
+
+Username : Pasika
+Password : 123456789
