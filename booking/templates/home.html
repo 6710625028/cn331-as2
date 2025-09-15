@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}หน้าแรก{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1>ยินดีต้อนรับสู่ระบบจองห้อง</h1>
+    <p><a href="{% url 'rooms' %}" class="btn btn-success">ดูรายการห้อง</a></p>
+</div>
+{% endblock %}

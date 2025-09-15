@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}เข้าสู่ระบบ{% endblock %}
+
+{% block content %}
+<h2>เข้าสู่ระบบ</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
+    <p>ยังไม่มีบัญชี? <a href="{% url 'register' %}">สมัครสมาชิกที่นี่</a></p>
+</form>
+{% endblock %}
