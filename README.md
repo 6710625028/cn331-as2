@@ -31,3 +31,7 @@ python manage.py runserver
 
 Username : Pasika
 Password : 123456789
+# ลิงค์คลิปวิดีโอ
+https://youtu.be/pnt9kfKQNM8
+https://youtu.be/b50nmTgYpF8
+
