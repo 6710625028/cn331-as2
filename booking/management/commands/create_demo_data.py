@@ -45,19 +45,22 @@ class Command(BaseCommand):
 
 
         users_to_create = [
-            ("user1", "pass111"),
-            ("user2", "pass222"),
-            ("user3", "pass333"),
+            ("user1", "user123"),
+            ("user2", "user123"),
+            ("user3", "user123"),
         ]
-        for uname, pwd in users_to_create:
-            if not User.objects.filter(username=uname).exists():
-                User.objects.create_user(username=uname, password=pwd)
-                self.stdout.write(self.style.SUCCESS(f"Created user: {uname}"))
-            else:
-                self.stdout.write(self.style.WARNING(f"User {uname} already exists"))
-            accounts.append((uname, pwd, "user"))  
 
-        # --- 3) Create Room objects ---
+        for username, password in users_to_create:
+            user_exists = User.objects.filter(username=username).exists()
+
+            if not user_exists:
+                User.objects.create_user(username=username, password=password)
+                accounts.append((username, password, "user"))
+                self.stdout.write(self.style.SUCCESS(f"✅ Created user: {username}"))
+            else:
+                accounts.append((username, "(already existed)", "user"))
+                self.stdout.write(self.style.WARNING(f"⚠️ User {username} already exists"))
+        
         Room = apps.get_model('booking', 'Room')  
         room_list = [
             ("Room A", 4, "Demo room A"),
@@ -71,7 +74,7 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(self.style.WARNING(f"Room already exists: {name}"))
 
-        # --- 4) Export accounts to PDF ---
+        
         base_dir = Path(settings.BASE_DIR)
         out_folder = base_dir / "deploy_reports"
         out_folder.mkdir(parents=True, exist_ok=True)
