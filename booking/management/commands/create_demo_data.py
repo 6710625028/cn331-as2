@@ -22,42 +22,40 @@ class Command(BaseCommand):
         User = get_user_model()
         accounts = []
 
-        # --- 1) Create admin account ---
         admin_username = "admin"
         admin_password = "admin123"
         if not User.objects.filter(username=admin_username).exists():
-            # create_superuser or create with flags
             try:
-                User.objects.create_superuser(username=admin_username,
-                                              password=admin_password,
-                                              email="admin@example.com")
+                User.objects.create_superuser(
+                    username=admin_username,
+                    password=admin_password,
+                    email="admin@example.com"
+                )
+                self.stdout.write(self.style.SUCCESS(f"Created admin: {admin_username}"))
             except TypeError:
-                # fallback if create_superuser signature differs
                 u = User.objects.create(username=admin_username, email="admin@example.com")
                 u.set_password(admin_password)
                 u.is_staff = True
                 u.is_superuser = True
                 u.save()
-            accounts.append((admin_username, admin_password, "admin"))
-            self.stdout.write(self.style.SUCCESS(f"Created admin: {admin_username}"))
+                self.stdout.write(self.style.SUCCESS(f"Created admin (fallback): {admin_username}"))
         else:
-            accounts.append((admin_username, "(already existed)", "admin"))
             self.stdout.write(self.style.WARNING("Admin already exists"))
+        accounts.append((admin_username, admin_password, "admin"))
 
-        # --- 2) Create regular users ---
+
         users_to_create = [
-            ("user1", "user123"),
-            ("user2", "user123"),
-            ("user3", "user123"),
+            ("user1", "pass111"),
+            ("user2", "pass222"),
+            ("user3", "pass333"),
         ]
         for uname, pwd in users_to_create:
             if not User.objects.filter(username=uname).exists():
-                u = User.objects.create_user(username=uname, password=pwd)
-                accounts.append((uname, pwd, "user"))
+                User.objects.create_user(username=uname, password=pwd)
                 self.stdout.write(self.style.SUCCESS(f"Created user: {uname}"))
             else:
-                accounts.append((uname, "(already existed)", "user"))
                 self.stdout.write(self.style.WARNING(f"User {uname} already exists"))
+            accounts.append((uname, pwd, "user"))  
 
         # --- 3) Create Room objects ---
         Room = apps.get_model('booking', 'Room')  
