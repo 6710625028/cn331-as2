@@ -5,7 +5,7 @@ from django.conf import settings
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from pathlib import Path
-import os
+
 
 class Command(BaseCommand):
     help = "Create demo data (admin, 3 users, 3 rooms) and export accounts to a PDF."
@@ -22,62 +22,54 @@ class Command(BaseCommand):
         User = get_user_model()
         accounts = []
 
+        # --- 1) Admin account ---
         admin_username = "admin"
         admin_password = "admin123"
-        if not User.objects.filter(username=admin_username).exists():
-            try:
-                User.objects.create_superuser(
-                    username=admin_username,
-                    password=admin_password,
-                    email="admin@example.com"
-                )
-                self.stdout.write(self.style.SUCCESS(f"Created admin: {admin_username}"))
-            except TypeError:
-                u = User.objects.create(username=admin_username, email="admin@example.com")
-                u.set_password(admin_password)
-                u.is_staff = True
-                u.is_superuser = True
-                u.save()
-                self.stdout.write(self.style.SUCCESS(f"Created admin (fallback): {admin_username}"))
-        else:
-            self.stdout.write(self.style.WARNING("Admin already exists"))
+        admin, _ = User.objects.get_or_create(username=admin_username)
+        admin.set_password(admin_password)
+        admin.is_staff = True
+        admin.is_superuser = True
+        admin.email = "admin@example.com"
+        admin.save()
+
+        self.stdout.write(self.style.SUCCESS(f"✅ Admin password set: {admin_username}"))
         accounts.append((admin_username, admin_password, "admin"))
 
+        # --- 2) Users with the same password ---
+        shared_password = "pass123"
+        users_to_create = ["user1", "user2", "user3"]
 
-        users_to_create = [
-            ("user1", "user123"),
-            ("user2", "user123"),
-            ("user3", "user123"),
-        ]
+        for username in users_to_create:
+            user, _ = User.objects.get_or_create(username=username)
+            user.set_password(shared_password)  # รีเซ็ตรหัสให้ตรงกันทุกครั้ง
+            user.save()
 
-        for username, password in users_to_create:
-            user_exists = User.objects.filter(username=username).exists()
+            self.stdout.write(self.style.SUCCESS(f"✅ User password set: {username}"))
+            accounts.append((username, shared_password, "user"))
 
-            if not user_exists:
-                User.objects.create_user(username=username, password=password)
-                accounts.append((username, password, "user"))
-                self.stdout.write(self.style.SUCCESS(f"✅ Created user: {username}"))
-            else:
-                accounts.append((username, "(already existed)", "user"))
-                self.stdout.write(self.style.WARNING(f"⚠️ User {username} already exists"))
-        
-        Room = apps.get_model('booking', 'Room')  
+        # --- 3) Rooms ---
+        Room = apps.get_model('booking', 'Room')
         room_list = [
             ("Room A", 4, "Demo room A"),
             ("Room B", 8, "Demo room B"),
             ("Room C", 2, "Demo room C"),
         ]
+
         for name, cap, desc in room_list:
-            obj, created = Room.objects.get_or_create(name=name, defaults={'capacity': cap, 'description': desc})
+            obj, created = Room.objects.get_or_create(
+                name=name,
+                defaults={'capacity': cap, 'description': desc}
+            )
             if created:
                 self.stdout.write(self.style.SUCCESS(f"Created room: {name}"))
             else:
                 self.stdout.write(self.style.WARNING(f"Room already exists: {name}"))
 
-        
+        # --- 4) Export to PDF ---
         base_dir = Path(settings.BASE_DIR)
         out_folder = base_dir / "deploy_reports"
         out_folder.mkdir(parents=True, exist_ok=True)
+
         pdf_name = options['pdf_name']
         pdf_path = out_folder / pdf_name
 
@@ -85,6 +77,7 @@ class Command(BaseCommand):
         c.setFont("Helvetica-Bold", 14)
         c.drawString(50, 800, "Demo User Accounts")
         c.setFont("Helvetica", 11)
+
         y = 770
         for uname, pwd, role in accounts:
             line = f"{role.upper():6} | Username: {uname} | Password: {pwd}"
@@ -94,7 +87,7 @@ class Command(BaseCommand):
                 c.showPage()
                 c.setFont("Helvetica", 11)
                 y = 800
-        c.save()
 
+        c.save()
         self.stdout.write(self.style.SUCCESS(f"Exported accounts PDF to: {pdf_path}"))
         self.stdout.write(self.style.SUCCESS("Done."))
