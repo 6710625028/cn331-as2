@@ -1,10 +1,31 @@
 {% extends 'base.html' %}
 
-{% block title %}หน้าแรก{% endblock %}
+{% block title %}หน้าแรก - ระบบจองห้องเรียน{% endblock %}
 
 {% block content %}
-<div class="text-center">
-    <h1>ยินดีต้อนรับสู่ระบบจองห้อง</h1>
-    <p><a href="{% url 'rooms' %}" class="btn btn-success">ดูรายการห้อง</a></p>
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1>ยินดีต้อนรับสู่ระบบจองห้อง</h1>
+        <p>คุณสามารถดูรายการห้องด้านล่าง หรือเข้าสู่ระบบเพื่อทำการจอง</p>
+    </div>
+
+    <h2>รายการห้อง</h2>
+    {% if rooms %}
+    <div class="row">
+        {% for room in rooms %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.name }}</h5>
+                    <p class="card-text">ความจุ: {{ room.capacity }} คน</p>
+                    <p class="card-text">{{ room.description|default:"ไม่มีคำอธิบาย" }}</p>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>ไม่มีห้องเรียนในระบบ</p>
+    {% endif %}
 </div>
 {% endblock %}
