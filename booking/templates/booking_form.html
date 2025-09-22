@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 
+<<<<<<< HEAD
 urlpatterns = [
     path('', views.home, name='home'),
 
@@ -14,3 +15,34 @@ urlpatterns = [
 
     path('register/', views.register_view, name='register'),
 ]
+=======
+{% block title %}ฟอร์มจองห้องเรียน{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="mb-4">ฟอร์มจองห้องเรียน</h2>
+
+    {# ส่วนนี้มาจาก HEAD: ใช้สำหรับแสดงข้อความแจ้งเตือน (messages) เช่น แจ้งการจองสำเร็จ/ผิดพลาด #}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {# วิธีที่ง่ายและยืดหยุ่นที่สุดในการแสดงฟอร์มใน Django คือใช้ form.as_p หรือ form.as_table #}
+        {# หากคุณต้องการใช้ field ที่กำหนดเองแบบ Bootstrap จากฝั่ง b3175b2 คุณต้องปรับ form.as_p เป็นการวนลูปฟิลด์ #}
+
+        {# ตัวอย่างการแสดงฟอร์มแบบง่าย (ใช้ form.as_p จากฝั่ง HEAD) #}
+        {{ form.as_p }} 
+
+        <button type="submit" class="btn btn-success w-100">ยืนยันการจอง</button>
+    </form>
+    
+    <p class="mt-3"><a href="{% url 'home' %}">&laquo; กลับหน้าหลัก</a></p>
+</div>
+{% endblock %}
+>>>>>>> ec2a503 (Save local template files before merge)
