@@ -19,8 +19,8 @@ https://cn331-as2-jmb3.onrender.com/
 2. สร้าง virtual environment และติดตั้ง dependencies
     ```bash
     python -m venv venv
-    source venv/bin/activate  # สำหรับ Linux/macOS
-    .\venv\Scripts\activate   # สำหรับ Windows PowerShell
+    source venv/bin/activate  # สำหรับ Linux/macOS
+    .\venv\Scripts\activate   # สำหรับ Windows PowerShell
     
     # ติดตั้ง requirements (ถ้ามี)
     # pip install -r requirements.txt
