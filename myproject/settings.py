@@ -11,16 +11,21 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Security
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-unsafe-secret-key")
+# --- CORE SECURITY / DEPLOYMENT SETTINGS ---
+
+# Secret Key (ดึงจาก Env Variable เพื่อความปลอดภัย)
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-secret-key")
+# ลบ ALT_SECRET_KEY ออก เนื่องจากไม่จำเป็นและเป็น Hardcoded
+
+# Debug Mode (ดึงจาก Env Variable)
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
 
-# Allow both local + deploy
+# Allowed Hosts (ใช้ os.getenv เพื่อความยืดหยุ่นในการ Deploy บน Render)
 ALLOWED_HOSTS = os.getenv(
     "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,cn331-as2-jmb3.onrender.com"
 ).split(",")
 
-# Database (prefer DATABASE_URL if provided, fallback sqlite)
+# Database (ใช้ dj_database_url เพื่อรองรับ Postgres บน Render)
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
@@ -28,7 +33,8 @@ DATABASES = {
     )
 }
 
-# Installed apps
+# --- APPLICATION DEFINITION ---
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -36,15 +42,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "booking",
+    "booking", # แอปของคุณ
 ]
 
-# Auth redirects
+# --- AUTH REDIRECTS ---
+# ใช้ URL Name ("login", "rooms") แทน Path เพื่อความยืดหยุ่น
 LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "rooms"
-LOGOUT_REDIRECT_URL = "login"
+LOGOUT_REDIRECT_URL = "home" # ปรับเป็น 'home' เพื่อให้กลับหน้าหลักหลัง logout
 
-# Middleware
+# --- MIDDLEWARE ---
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -74,7 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "myproject.wsgi.application"
 
-# Password validation
+# --- PASSWORD VALIDATION ---
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -82,13 +88,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Internationalization
+# --- INTERNATIONALIZATION / STATIC FILES ---
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# Static files
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
