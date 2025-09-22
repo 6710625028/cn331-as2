@@ -9,17 +9,29 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Database
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=600
+    )
+}
 
-SECRET_KEY = 'django-insecure-jan4mf!*bil*zkge0kzpmu*ym=#c%n+b)we^=v(k752ae2^wla'
-
+# Secret keys
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-secret-key")
 ALT_SECRET_KEY = 'django-insecure-l4^a3pil#%jfb1i9%(%lu96#!zn!=u6g3&vvygd2i=5q)zk^6y'
 
-DEBUG = True
-ALLOWED_HOSTS = []
+# Debug mode
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
 
+# ✅ Combined allowed hosts (แก้ conflict แล้ว)
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "cn331-as2-jmb3.onrender.com"]
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'booking',  
+    'booking',
 ]
+
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -58,13 +73,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
