@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load booking_extras %}  
+
+{% block title %}รายการห้อง{% endblock %}
+
+{% block content %}
+<h2>รายการห้องทั้งหมด</h2>
+
+{# แสดงข้อความแจ้งเตือนจาก messages #}
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<div class="row">
+    {% for room in rooms %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ room.name }}</h5>
+                <p class="card-text">{{ room.description }}</p>
+
+                {# หาสถานะการจองของ user สำหรับห้องนี้ #}
+                {% with booking=user_bookings|get_booking_for_room:room.id %}
+                    {% if booking %}
+                        <p>สถานะการจอง: <strong>{{ booking.get_status_display }}</strong></p>
+                        {% if booking.status == 'pending' %}
+                            <p class="text-warning">รอการอนุมัติ</p>
+                        {% elif booking.status == 'approved' %}
+                            <p class="text-success">อนุมัติแล้ว</p>
+                        {% elif booking.status == 'rejected' %}
+                            <p class="text-danger">ถูกปฏิเสธ</p>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'book_room' room.id %}" class="btn btn-primary">จองห้อง</a>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>ไม่มีห้องให้จองในขณะนี้</p>
+    {% endfor %}
+</div>
+{% endblock %}

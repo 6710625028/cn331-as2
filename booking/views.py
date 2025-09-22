@@ -1,14 +1,43 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Room, Booking
+from .forms import BookingForm, RegisterForm
+
 
 def home(request):
     rooms = Room.objects.all()
-    return render(request, 'booking/home.html', {'rooms': rooms})
+    return render(request, 'home.html', {'rooms': rooms})
+
+
+@login_required
+def rooms(request):
+    rooms = Room.objects.all()
+    user_bookings = Booking.objects.filter(user=request.user)
+    return render(request, 'rooms.html', {'rooms': rooms, 'user_bookings': user_bookings})
+
+
+@login_required
+def book_room(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.room = room
+            booking.user = request.user
+            booking.save()
+            messages.success(request, f'จองห้อง "{room.name}" สำเร็จแล้ว!')
+            return redirect('rooms')
+        else:
+            messages.error(request, 'กรุณากรอกข้อมูลให้ถูกต้อง')
+    else:
+        form = BookingForm()
+    return render(request, 'booking_form.html', {'form': form, 'room': room})
+
 
 def login_view(request):
-    error = None
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -17,8 +46,10 @@ def login_view(request):
             login(request, user)
             return redirect('home')
         else:
-            error = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'
-    return render(request, 'booking/login.html', {'error': error})
+            # รวม error message ทั้งสองแบบ
+            messages.error(request, 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')
+    return render(request, 'login.html')
+
 
 @login_required
 def booking_form(request):
@@ -29,5 +60,18 @@ def booking_form(request):
         time = request.POST.get('time')
         room = Room.objects.get(id=room_id)
         Booking.objects.create(room=room, user=request.user, date=date, time=time)
+        messages.success(request, f'จองห้อง "{room.name}" สำเร็จแล้ว!')
         return redirect('home')
     return render(request, 'booking/booking_form.html', {'rooms': rooms})
+
+
+def register_view(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ')
+            return redirect('login')
+    else:
+        form = RegisterForm()
+    return render(request, 'register.html', {'form': form})
