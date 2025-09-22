@@ -10,6 +10,7 @@ https://github.com/6710625028/cn331-as2.git
 ### Live App (ถ้ามี)
 https://cn331-as2-jmb3.onrender.com/
 
+<<<<<<< HEAD
 ---
 
 ## 🛠️ วิธีติดตั้ง
@@ -48,3 +49,5 @@ https://cn331-as2-jmb3.onrender.com/
 ## 🧑‍💻 สมาชิกกลุ่ม
 * นายเบญจพล ปินะกะสา 6710625028
 * พศิกา ศรัทธาพร 6710625036
+=======
+>>>>>>> 3de78f8 (README.md)
