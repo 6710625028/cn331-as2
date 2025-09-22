@@ -4,14 +4,11 @@
 
 {% block content %}
 <div class="container mt-4">
-<<<<<<< HEAD
-=======
     <div class="text-center mb-5">
         <h1>ยินดีต้อนรับสู่ระบบจองห้อง</h1>
         <p>คุณสามารถดูรายการห้องด้านล่าง หรือเข้าสู่ระบบเพื่อทำการจอง</p>
     </div>
 
->>>>>>> ec2a503 (Save local template files before merge)
     <h2>รายการห้อง</h2>
     {% if rooms %}
     <div class="row">
@@ -22,11 +19,7 @@
                     <h5 class="card-title">{{ room.name }}</h5>
                     <p class="card-text">ความจุ: {{ room.capacity }} คน</p>
                     <p class="card-text">{{ room.description|default:"ไม่มีคำอธิบาย" }}</p>
-<<<<<<< HEAD
                 </div>
-=======
-                    </div>
->>>>>>> ec2a503 (Save local template files before merge)
             </div>
         </div>
         {% endfor %}
