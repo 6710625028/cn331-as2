@@ -22,7 +22,7 @@ class Command(BaseCommand):
         User = get_user_model()
         accounts = []
 
-        # --- 1) Admin account ---
+        
         admin_username = "admin"
         admin_password = "admin123"
         admin, _ = User.objects.get_or_create(username=admin_username)
@@ -35,19 +35,19 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"✅ Admin password set: {admin_username}"))
         accounts.append((admin_username, admin_password, "admin"))
 
-        # --- 2) Users with the same password ---
+        
         shared_password = "pass123"
         users_to_create = ["user1", "user2", "user3"]
 
         for username in users_to_create:
             user, _ = User.objects.get_or_create(username=username)
-            user.set_password(shared_password)  # รีเซ็ตรหัสให้ตรงกันทุกครั้ง
+            user.set_password(shared_password)  
             user.save()
 
             self.stdout.write(self.style.SUCCESS(f"✅ User password set: {username}"))
             accounts.append((username, shared_password, "user"))
 
-        # --- 3) Rooms ---
+        
         Room = apps.get_model('booking', 'Room')
         room_list = [
             ("Room A", 4, "Demo room A"),
@@ -65,7 +65,7 @@ class Command(BaseCommand):
             else:
                 self.stdout.write(self.style.WARNING(f"Room already exists: {name}"))
 
-        # --- 4) Export to PDF ---
+        
         base_dir = Path(settings.BASE_DIR)
         out_folder = base_dir / "deploy_reports"
         out_folder.mkdir(parents=True, exist_ok=True)
