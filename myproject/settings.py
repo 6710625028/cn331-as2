@@ -14,6 +14,25 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+import os
+import dj_database_url 
+
+DATABASES = {
+    'default': dj_database_url.config(default='sqlite:///db.sqlite3')
+}
+
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-secret-key")
+
+DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
+
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=600
+    )
+}
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +44,7 @@ SECRET_KEY = 'django-insecure-jan4mf!*bil*zkge0kzpmu*ym=#c%n+b)we^=v(k752ae2^wla
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["cn331-as2-jmb3.onrender.com"]
 
 
 # Application definition
@@ -40,6 +59,9 @@ INSTALLED_APPS = [
     'booking',
 
 ]
+
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
