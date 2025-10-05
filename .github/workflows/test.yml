@@ -8,6 +8,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: 'ci-testing-secret-key' 
+      DJANGO_SETTINGS_MODULE: myproject.settings
 
     steps:
       - name: Checkout repository
