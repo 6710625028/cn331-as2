@@ -1,6 +1,6 @@
-# CN331 Assignment 2 - Deploy
+# CN331 Assignment 2 - Testing
 
-## ℹ️ ข้อมูลโปรเจกต์
+## ข้อมูลโปรเจกต์
 โปรเจกต์ Django สำหรับระบบจองห้องเรียน (Classroom Booking System)
 
 ### Repository
