@@ -18,7 +18,6 @@ def rooms(request):
 
 @login_required
 def book_room(request, room_id):
-    # ใช้ฟอร์ม BookingForm ในการจองห้องพักเฉพาะ
     room = get_object_or_404(Room, id=room_id)
     if request.method == 'POST':
         form = BookingForm(request.POST)
@@ -39,7 +38,6 @@ def book_room(request, room_id):
 def booking_form(request):
     rooms = Room.objects.all()
     if request.method == 'POST':
-        # การตรวจสอบความถูกต้องควรถูกเพิ่มที่นี่ เพื่อให้ปลอดภัยยิ่งขึ้น
         room_id = request.POST.get('room')
         date = request.POST.get('date')
         time = request.POST.get('time')
