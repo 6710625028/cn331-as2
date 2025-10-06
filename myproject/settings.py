@@ -14,24 +14,19 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Database
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}", conn_max_age=600
     )
 }
 
-# Secret keys
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-secret-key")
 ALT_SECRET_KEY = 'django-insecure-l4^a3pil#%jfb1i9%(%lu96#!zn!=u6g3&vvygd2i=5q)zk^6y'
 
-# Debug mode
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
 
-# ✅ Combined allowed hosts (แก้ conflict แล้ว)
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "cn331-as2-jmb3.onrender.com"]
 
-# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
