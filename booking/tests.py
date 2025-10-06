@@ -37,7 +37,7 @@ class RoomBookingTests(TestCase):
 
     def test_rooms_page_requires_login(self):
         response = self.client.get(reverse("rooms"))
-        self.assertEqual(response.status_code, 302)  # redirect ไป login
+        self.assertEqual(response.status_code, 302)  
 
     def test_book_room_success(self):
         self.client.login(username=self.username, password=self.password)
