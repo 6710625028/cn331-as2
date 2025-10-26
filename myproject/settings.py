@@ -11,29 +11,21 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# --- CORE SECURITY / DEPLOYMENT SETTINGS ---
 
-# Secret Key (ดึงจาก Env Variable เพื่อความปลอดภัย)
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "unsafe-secret-key")
-# ลบ ALT_SECRET_KEY ออก เนื่องจากไม่จำเป็นและเป็น Hardcoded
 
-# Debug Mode (ดึงจาก Env Variable)
 DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1")
 
-# Allowed Hosts (ใช้ os.getenv เพื่อความยืดหยุ่นในการ Deploy บน Render)
 ALLOWED_HOSTS = os.getenv(
     "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,cn331-as2-jmb3.onrender.com"
 ).split(",")
 
-# Database (ใช้ dj_database_url เพื่อรองรับ Postgres บน Render)
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
         conn_max_age=600,
     )
 }
-
-# --- APPLICATION DEFINITION ---
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -42,17 +34,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "booking", # แอปของคุณ
+    "booking",  
 ]
 
-# --- AUTH REDIRECTS ---
-# ใช้ URL Name ("login", "rooms") แทน Path เพื่อความยืดหยุ่น
 LOGIN_URL = "login"
-LOGOUT_REDIRECT_URL = "home" # ปรับเป็น 'home' เพื่อให้กลับหน้าหลักหลัง logout
+LOGOUT_REDIRECT_URL = "home"
 
-# --- MIDDLEWARE ---
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -80,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "myproject.wsgi.application"
 
-# --- PASSWORD VALIDATION ---
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -88,13 +79,17 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# --- INTERNATIONALIZATION / STATIC FILES ---
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
