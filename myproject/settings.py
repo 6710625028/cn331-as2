@@ -97,4 +97,9 @@ STATICFILES_DIRS = [static_dir]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = '/rooms/'
+CSRF_TRUSTED_ORIGINS = [
+    "https://cn331-as2-1-anug.onrender.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
 
