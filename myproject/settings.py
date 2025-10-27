@@ -13,7 +13,7 @@ else:
     ALLOWED_HOSTS = [
         "cn331-as2-1-anug.onrender.com",
         "localhost",
-        "127.0.0.1:8000/admin/",
+        "127.0.0.1",
     ]
 
 if os.getenv("DATABASE_URL"):
@@ -94,5 +94,5 @@ if not static_dir.exists():
     static_dir.mkdir()
 
 STATICFILES_DIRS = [static_dir]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
