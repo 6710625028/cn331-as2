@@ -13,7 +13,7 @@ else:
     ALLOWED_HOSTS = [
         "cn331-as2-1-anug.onrender.com",
         "localhost",
-        "127.0.0.1",
+        "127.0.0.1:8000/admin/",
     ]
 
 if os.getenv("DATABASE_URL"):
