@@ -96,3 +96,5 @@ if not static_dir.exists():
 STATICFILES_DIRS = [static_dir]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+LOGIN_REDIRECT_URL = '/rooms/'
+
