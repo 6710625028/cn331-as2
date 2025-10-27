@@ -12,7 +12,7 @@ https://cn331-as2-jmb3.onrender.com/
 
 ---
 
-## 🛠️ วิธีติดตั้ง
+# 🛠️ วิธีติดตั้ง
 1. Clone โปรเจกต์นี้
     ```bash
     git clone https://github.com/6710625028/my-django-app.git
