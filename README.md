@@ -8,7 +8,7 @@
 https://github.com/6710625028/cn331-as2.git
 
 ### Live App (ถ้ามี)
-https://cn331-as2-jmb3.onrender.com/
+(https://cn331-as2-1-anug.onrender.com/)
 
 ---
 
